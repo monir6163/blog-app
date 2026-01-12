@@ -13,6 +13,14 @@ export const auth = betterAuth({
   },
   // Add all possible origins for web, mobile, and testing environments
   trustedOrigins: [process.env.CLIENT_URL || "http://localhost:3000"],
+
+  // email verification
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      console.log({ user, url, token });
+    },
+  },
+
   // extendable additionalfield user schema
   user: {
     additionalFields: {
