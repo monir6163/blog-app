@@ -1,16 +1,16 @@
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean    @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   sessions      Session[]
   accounts      Account[]
-  role          UserRole  @default(USER)
+  role          UserRole   @default(USER)
   phone         String?
-  status        String?   @default("active")
+  status        UserStatus @default(ACTIVE)
 
   @@unique([email])
   @@map("user")
@@ -68,4 +68,9 @@ enum UserRole {
   USER
   ADMIN
   MODARETOR
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
 }
