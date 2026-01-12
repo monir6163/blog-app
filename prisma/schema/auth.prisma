@@ -8,10 +8,9 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
-
-  role   UserRole @default(USER)
-  phone  String?
-  status String?  @default("active")
+  role          UserRole  @default(USER)
+  phone         String?
+  status        String?   @default("active")
 
   @@unique([email])
   @@map("user")
@@ -68,5 +67,5 @@ model Verification {
 enum UserRole {
   USER
   ADMIN
-  MODERATOR
+  MODARETOR
 }
