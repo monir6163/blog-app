@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { UserStatus } from "../../generated/prisma/enums";
 import { transporter } from "./mailService";
 import { prisma } from "./prisma";
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -148,6 +149,16 @@ export const auth = betterAuth({
         console.log("email send faield", error);
         throw error;
       }
+    },
+  },
+
+  // social providers
+  socialProviders: {
+    google: {
+      prompt: "select_account consent",
+      accessType: "offline",
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
   // extendable additionalfield user schema
