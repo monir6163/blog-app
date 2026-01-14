@@ -17,7 +17,7 @@ app.use(
     credentials: true,
   })
 );
-app.use("/posts", postRouter);
+app.use("/api/posts", postRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Prisma Blog App");
