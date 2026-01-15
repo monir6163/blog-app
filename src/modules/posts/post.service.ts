@@ -13,11 +13,22 @@ const createPost = async (
 const getAllPost = async (payload: Payload) => {
   const result = await prisma.post.findMany({
     where: {
-      title: {
-        contains: payload.s,
-        mode: "insensitive",
-      },
+      OR: [
+        {
+          title: {
+            contains: payload.s,
+            mode: "insensitive",
+          },
+        },
+        {
+          content: {
+            contains: payload.s,
+            mode: "insensitive",
+          },
+        },
+      ],
     },
+    orderBy: { created_at: "desc" },
   });
   return result;
 };
