@@ -1,3 +1,4 @@
 export interface Payload {
-  s: string | undefined;
+  s?: string | undefined;
+  tag?: string[];
 }

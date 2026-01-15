@@ -18,10 +18,13 @@ const createPost = async (req: Request, res: Response) => {
 
 const getAllPost = async (req: Request, res: Response) => {
   try {
-    const { s } = req.query;
-    const result = await postService.getAllPost({ s } as Payload);
+    const { s, tags } = req.query;
+    const tag =
+      typeof tags === "string" && tags.length > 0 ? tags.split(",") : undefined;
+    const result = await postService.getAllPost({ s, tag } as Payload);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
+    console.log("e", error);
     res.status(500).json({ success: false, error: "post get failed" });
   }
 };
