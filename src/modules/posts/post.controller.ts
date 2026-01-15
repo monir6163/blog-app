@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Payload } from "./interface.types";
 import { postService } from "./post.service";
 
 const createPost = async (req: Request, res: Response) => {
@@ -17,7 +18,8 @@ const createPost = async (req: Request, res: Response) => {
 
 const getAllPost = async (req: Request, res: Response) => {
   try {
-    const result = await postService.getAllPost();
+    const { s } = req.query;
+    const result = await postService.getAllPost({ s } as Payload);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     res.status(500).json({ success: false, error: "post get failed" });
