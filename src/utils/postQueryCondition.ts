@@ -48,5 +48,11 @@ export const buildPostQueryCondition = (payload: Payload) => {
       status: payload.status,
     });
   }
+  // filter by authorId
+  if (payload.authorId) {
+    andConditions.push({
+      authorId: payload.authorId,
+    });
+  }
   return andConditions.length > 0 ? { AND: andConditions } : {};
 };

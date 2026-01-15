@@ -5,4 +5,5 @@ export interface Payload {
   tag?: string[];
   isFeature?: boolean | undefined;
   status?: PostStatus | undefined;
+  authorId?: string | undefined;
 }
