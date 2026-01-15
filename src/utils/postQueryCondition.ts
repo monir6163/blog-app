@@ -4,7 +4,7 @@ import { Payload } from "../modules/posts/interface.types";
 export const buildPostQueryCondition = (payload: Payload) => {
   const andConditions: PostWhereInput[] = [];
 
-  // 🔍 Search filter
+  // Search filter
   if (payload.s) {
     andConditions.push({
       OR: [
@@ -28,13 +28,18 @@ export const buildPostQueryCondition = (payload: Payload) => {
       ],
     });
   }
-
-  // 🏷️ Tag filter
+  // Tag filter
   if (payload.tag && payload.tag.length > 0) {
     andConditions.push({
       tags: {
         hasSome: payload.tag,
       },
+    });
+  }
+  // isFeature filter
+  if (typeof payload.isFeature === "boolean") {
+    andConditions.push({
+      isFeatured: payload.isFeature,
     });
   }
 

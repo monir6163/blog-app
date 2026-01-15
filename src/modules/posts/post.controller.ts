@@ -18,10 +18,21 @@ const createPost = async (req: Request, res: Response) => {
 
 const getAllPost = async (req: Request, res: Response) => {
   try {
-    const { s, tags } = req.query;
+    const { s, tags, isFeatured } = req.query;
     const tag =
       typeof tags === "string" && tags.length > 0 ? tags.split(",") : undefined;
-    const result = await postService.getAllPost({ s, tag } as Payload);
+    const isFeature = isFeatured
+      ? isFeatured === "true"
+        ? true
+        : isFeatured === "false"
+        ? false
+        : undefined
+      : undefined;
+    const result = await postService.getAllPost({
+      s,
+      tag,
+      isFeature,
+    } as Payload);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     console.log("e", error);
