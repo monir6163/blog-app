@@ -42,6 +42,11 @@ export const buildPostQueryCondition = (payload: Payload) => {
       isFeatured: payload.isFeature,
     });
   }
-
+  // filter by status
+  if (payload.status) {
+    andConditions.push({
+      status: payload.status,
+    });
+  }
   return andConditions.length > 0 ? { AND: andConditions } : {};
 };
