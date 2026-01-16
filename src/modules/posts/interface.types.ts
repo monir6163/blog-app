@@ -6,4 +6,6 @@ export interface Payload {
   isFeature?: boolean | undefined;
   status?: PostStatus | undefined;
   authorId?: string | undefined;
+  page: number;
+  limit: number;
 }

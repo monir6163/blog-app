@@ -12,7 +12,10 @@ const createPost = async (
 };
 
 const getAllPost = async (payload: Payload) => {
+  const skip = (payload.page - 1) * payload.limit;
   const result = await prisma.post.findMany({
+    take: payload.limit,
+    skip: skip,
     where: buildPostQueryCondition(payload),
     orderBy: { created_at: "desc" },
   });

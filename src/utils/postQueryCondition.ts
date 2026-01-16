@@ -54,5 +54,6 @@ export const buildPostQueryCondition = (payload: Payload) => {
       authorId: payload.authorId,
     });
   }
+
   return andConditions.length > 0 ? { AND: andConditions } : {};
 };
