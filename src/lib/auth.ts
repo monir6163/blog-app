@@ -9,7 +9,7 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   // Add all possible origins for web, mobile, and testing environments
-  trustedOrigins: [process.env.CLIENT_URL || "http://localhost:3000"],
+  trustedOrigins: [process.env.CORS_ORIGIN || "http://localhost:3000"],
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,

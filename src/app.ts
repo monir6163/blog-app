@@ -5,18 +5,19 @@ import { auth } from "./lib/auth";
 import { postRouter } from "./modules/posts/post.router";
 
 const app: Application = express();
-app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json());
 
 // Configure CORS middleware
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
+app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use("/api/posts", postRouter);
 
 app.get("/", (req, res) => {
