@@ -7,7 +7,6 @@ async function seedAdmin() {
       name: "Admin",
       email: "admin@admin.com",
       role: "ADMIN",
-      emailVerified: true,
       password: "admin@com",
     };
     // check already exists
@@ -32,6 +31,10 @@ async function seedAdmin() {
       }
     );
     if (adminRegister.ok) {
+      await prisma.user.updateMany({
+        where: { email: adminData.email },
+        data: { emailVerified: true },
+      });
       console.log("admin create success");
     }
   } catch (error) {
