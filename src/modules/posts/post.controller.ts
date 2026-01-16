@@ -18,7 +18,17 @@ const createPost = async (req: Request, res: Response) => {
 
 const getAllPost = async (req: Request, res: Response) => {
   try {
-    const { s, tags, isFeatured, status, authorId, page, limit } = req.query;
+    const {
+      s,
+      tags,
+      isFeatured,
+      status,
+      authorId,
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+    } = req.query;
     const tag =
       typeof tags === "string" && tags.length > 0 ? tags.split(",") : undefined;
     const isFeature = isFeatured
@@ -40,6 +50,8 @@ const getAllPost = async (req: Request, res: Response) => {
       authorId,
       page: pageNumber,
       limit: limitNumber,
+      sortBy,
+      sortOrder,
     } as Payload);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
