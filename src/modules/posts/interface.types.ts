@@ -8,6 +8,7 @@ export interface Payload {
   authorId?: string | undefined;
   page: number;
   limit: number;
+  skip: number;
   sortBy?: string | undefined;
   sortOrder?: string | undefined;
 }

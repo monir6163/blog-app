@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import paginationSortingHelper from "../../helpers/paginationSorting";
 import { Payload } from "./interface.types";
 import { postService } from "./post.service";
 
@@ -18,17 +19,7 @@ const createPost = async (req: Request, res: Response) => {
 
 const getAllPost = async (req: Request, res: Response) => {
   try {
-    const {
-      s,
-      tags,
-      isFeatured,
-      status,
-      authorId,
-      page,
-      limit,
-      sortBy,
-      sortOrder,
-    } = req.query;
+    const { s, tags, isFeatured, status, authorId } = req.query;
     const tag =
       typeof tags === "string" && tags.length > 0 ? tags.split(",") : undefined;
     const isFeature = isFeatured
@@ -38,18 +29,18 @@ const getAllPost = async (req: Request, res: Response) => {
         ? false
         : undefined
       : undefined;
-
-    const pageNumber = Number(page || 1);
-    const limitNumber = Number(limit || 5);
-
+    const { page, limit, skip, sortBy, sortOrder } = paginationSortingHelper(
+      req.query
+    );
     const result = await postService.getAllPost({
       s,
       tag,
       isFeature,
       status,
       authorId,
-      page: pageNumber,
-      limit: limitNumber,
+      page,
+      limit,
+      skip,
       sortBy,
       sortOrder,
     } as Payload);
