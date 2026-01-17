@@ -9,6 +9,7 @@ export interface Payload {
   page: number;
   limit: number;
   skip: number;
+  totalPages: number;
   sortBy: string;
   sortOrder: string;
 }

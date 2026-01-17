@@ -26,12 +26,11 @@ const getAllPost = async (req: Request, res: Response) => {
       ? isFeatured === "true"
         ? true
         : isFeatured === "false"
-        ? false
-        : undefined
+          ? false
+          : undefined
       : undefined;
-    const { page, limit, skip, sortBy, sortOrder } = paginationSortingHelper(
-      req.query
-    );
+    const { page, limit, skip, totalPages, sortBy, sortOrder } =
+      paginationSortingHelper(req.query);
     const result = await postService.getAllPost({
       s,
       tag,
@@ -41,10 +40,11 @@ const getAllPost = async (req: Request, res: Response) => {
       page,
       limit,
       skip,
+      totalPages,
       sortBy,
       sortOrder,
     } as Payload);
-    res.status(200).json({ success: true, data: result });
+    res.status(200).json(result);
   } catch (error) {
     console.log("e", error);
     res.status(500).json({ success: false, error: "post get failed" });

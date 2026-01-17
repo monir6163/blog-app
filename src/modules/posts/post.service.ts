@@ -18,7 +18,18 @@ const getAllPost = async (payload: Payload) => {
     where: buildPostQueryCondition(payload),
     orderBy: { [payload.sortBy]: payload.sortOrder },
   });
-  return result;
+  const total = await prisma.post.count({
+    where: buildPostQueryCondition(payload),
+  });
+  return {
+    data: result,
+    pagination: {
+      total,
+      page: payload.page,
+      limit: payload.limit,
+      totalPages: payload.totalPages,
+    },
+  };
 };
 
 export const postService = { createPost, getAllPost };
