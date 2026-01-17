@@ -5,10 +5,12 @@ import { commentController } from "./comment.controller";
 
 const router = express.Router();
 
+router.get("/:commnentId", commentController.getCommentById);
+
 router.post(
   "/",
   authMiddlware(UserRole.USER, UserRole.ADMIN),
-  commentController.createComment
+  commentController.createComment,
 );
 
 export const commentRouter: Router = router;
