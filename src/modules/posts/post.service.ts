@@ -1,9 +1,9 @@
-import { Post } from "../../../generated/prisma/client";
+import { CommentStatus, Post } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { buildPostQueryCondition } from "../../utils/postQueryCondition";
 import { Payload } from "./interface.types";
 const createPost = async (
-  data: Omit<Post, "id" | "createdAt" | "updatedAt">
+  data: Omit<Post, "id" | "createdAt" | "updatedAt">,
 ) => {
   const result = await prisma.post.create({
     data,
@@ -47,6 +47,28 @@ const getPostById = async (id: string) => {
     const postData = await tx.post.findUnique({
       where: {
         post_id: id,
+      },
+      include: {
+        comments: {
+          where: {
+            parentId: null,
+            status: CommentStatus.APPROVED,
+          },
+          include: {
+            replies: {
+              where: {
+                status: CommentStatus.APPROVED,
+              },
+              include: {
+                replies: {
+                  where: {
+                    status: CommentStatus.APPROVED,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
     return postData;
