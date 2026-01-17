@@ -1,3 +1,4 @@
+import { CommentStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { IComments } from "./commnet.interface";
 
@@ -86,9 +87,49 @@ const commentDelete = async (authorId: string, commentId: string) => {
   return result;
 };
 
+const updateCommnent = async (
+  authorId: string,
+  commentId: string,
+  commentData: {
+    content?: string;
+    status?: CommentStatus;
+  },
+) => {
+  const findComment = await prisma.comment.findFirst({
+    where: {
+      comment_id: commentId,
+      authorId: authorId,
+    },
+    include: {
+      post: {
+        select: {
+          post_id: true,
+          title: true,
+        },
+      },
+    },
+  });
+  if (!findComment) {
+    throw new Error("comment not found!");
+  }
+  const result = await prisma.comment.update({
+    where: {
+      comment_id: commentId,
+      authorId: authorId,
+    },
+    data: {
+      content: commentData.content,
+      status: commentData.status,
+    },
+  });
+
+  return result;
+};
+
 export const commentService = {
   createComment,
   getCommentById,
   getCommentsByAuthorId,
   commentDelete,
+  updateCommnent,
 };
