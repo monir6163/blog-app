@@ -5,6 +5,7 @@ import { commentController } from "./comment.controller";
 
 const router = express.Router();
 
+router.get("/author/:authorId", commentController.getCommentsByAuthorId);
 router.get("/:commnentId", commentController.getCommentById);
 
 router.post(
