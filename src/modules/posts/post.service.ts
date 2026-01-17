@@ -16,12 +16,7 @@ const getAllPost = async (payload: Payload) => {
     take: payload.limit,
     skip: payload.skip,
     where: buildPostQueryCondition(payload),
-    orderBy:
-      payload.sortBy && payload.sortOrder
-        ? {
-            [payload.sortBy]: payload.sortOrder,
-          }
-        : { created_at: "desc" },
+    orderBy: { [payload.sortBy]: payload.sortOrder },
   });
   return result;
 };
