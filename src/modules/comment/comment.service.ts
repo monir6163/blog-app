@@ -59,8 +59,36 @@ const getCommentsByAuthorId = async (authorId: string) => {
   return result;
 };
 
+const commentDelete = async (authorId: string, commentId: string) => {
+  const findComment = await prisma.comment.findFirst({
+    where: {
+      comment_id: commentId,
+      authorId: authorId,
+    },
+    include: {
+      post: {
+        select: {
+          post_id: true,
+          title: true,
+        },
+      },
+    },
+  });
+  if (!findComment) {
+    throw new Error("comment not found!");
+  }
+  const result = await prisma.comment.delete({
+    where: {
+      comment_id: findComment.comment_id,
+      authorId: findComment.authorId,
+    },
+  });
+  return result;
+};
+
 export const commentService = {
   createComment,
   getCommentById,
   getCommentsByAuthorId,
+  commentDelete,
 };
