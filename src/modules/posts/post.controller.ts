@@ -102,10 +102,32 @@ const updatePost = async (req: Request, res: Response) => {
   }
 };
 
+const deletePost = async (req: Request, res: Response) => {
+  try {
+    const authorId = req.user;
+    const { postId } = req.params;
+    const isAdmin = authorId?.role === UserRole.ADMIN;
+    const result = await postService.deletePost(
+      authorId?.id as string,
+      postId,
+      isAdmin,
+    );
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to update post";
+    res.status(500).json({ error: errorMessage, details: error });
+  }
+};
+
 export const postController = {
   createPost,
   getAllPost,
   getPostById,
   getMyPosts,
   updatePost,
+  deletePost,
 };

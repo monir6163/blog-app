@@ -20,5 +20,10 @@ router.put(
   authMiddlware(UserRole.USER, UserRole.ADMIN),
   postController.updatePost,
 );
+router.delete(
+  "/:postId",
+  authMiddlware(UserRole.USER, UserRole.ADMIN),
+  postController.deletePost,
+);
 
 export const postRouter: Router = router;
