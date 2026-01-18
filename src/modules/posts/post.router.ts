@@ -6,6 +6,11 @@ import { postController } from "./post.controller";
 const router = express.Router();
 
 router.get("/", postController.getAllPost);
+router.get(
+  "/my-post",
+  authMiddlware(UserRole.USER, UserRole.ADMIN),
+  postController.getMyPosts,
+);
 
 router.get("/:id", postController.getPostById);
 

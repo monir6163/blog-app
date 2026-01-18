@@ -64,4 +64,24 @@ const getPostById = async (req: Request, res: Response) => {
   }
 };
 
-export const postController = { createPost, getAllPost, getPostById };
+const getMyPosts = async (req: Request, res: Response) => {
+  try {
+    const authorId = req.user?.id;
+    const result = await postService.getMyPosts(authorId as string);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to get myposts";
+    res.status(500).json({ error: errorMessage, details: error });
+  }
+};
+
+export const postController = {
+  createPost,
+  getAllPost,
+  getPostById,
+  getMyPosts,
+};
