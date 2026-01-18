@@ -125,6 +125,35 @@ const updateCommnent = async (
 
   return result;
 };
+const moderateCommnent = async (
+  commentId: string,
+  commentData: {
+    status?: CommentStatus;
+  },
+) => {
+  const findComment = await prisma.comment.findFirstOrThrow({
+    where: {
+      comment_id: commentId,
+    },
+    select: {
+      content: true,
+      status: true,
+    },
+  });
+  if (findComment.status === commentData.status) {
+    throw new Error("your comment status already up to date");
+  }
+  const result = await prisma.comment.update({
+    where: {
+      comment_id: commentId,
+    },
+    data: {
+      status: commentData.status,
+    },
+  });
+
+  return result;
+};
 
 export const commentService = {
   createComment,
@@ -132,4 +161,5 @@ export const commentService = {
   getCommentsByAuthorId,
   commentDelete,
   updateCommnent,
+  moderateCommnent,
 };

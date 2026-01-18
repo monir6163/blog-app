@@ -24,5 +24,10 @@ router.patch(
   authMiddlware(UserRole.USER, UserRole.ADMIN),
   commentController.updateCommnent,
 );
+router.patch(
+  "/moderate/:commentId",
+  authMiddlware(UserRole.ADMIN),
+  commentController.moderateCommnent,
+);
 
 export const commentRouter: Router = router;
