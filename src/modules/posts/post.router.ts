@@ -11,7 +11,7 @@ router.get(
   authMiddlware(UserRole.USER, UserRole.ADMIN),
   postController.getMyPosts,
 );
-router.get("/stats", postController.postStats);
+router.get("/stats", authMiddlware(UserRole.ADMIN), postController.postStats);
 
 router.get("/:id", postController.getPostById);
 
