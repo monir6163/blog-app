@@ -15,5 +15,10 @@ router.get(
 router.get("/:id", postController.getPostById);
 
 router.post("/", authMiddlware(UserRole.USER), postController.createPost);
+router.put(
+  "/:postId",
+  authMiddlware(UserRole.USER, UserRole.ADMIN),
+  postController.updatePost,
+);
 
 export const postRouter: Router = router;

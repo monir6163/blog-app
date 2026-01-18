@@ -121,4 +121,32 @@ const getMyPosts = async (authorId: string) => {
   return { total, result };
 };
 
-export const postService = { createPost, getAllPost, getPostById, getMyPosts };
+const updatePost = async (
+  autorId: string,
+  postId: string,
+  postData: Partial<Post>,
+  isAdmin: boolean,
+) => {
+  const findPost = await prisma.post.findUnique({
+    where: { post_id: postId },
+  });
+  if (!isAdmin && findPost?.authorId !== autorId) {
+    throw new Error("this post not your!");
+  }
+  if (!isAdmin) {
+    delete postData.isFeatured;
+  }
+  const result = await prisma.post.update({
+    where: { post_id: findPost?.post_id, authorId: findPost?.authorId },
+    data: postData,
+  });
+  return result;
+};
+
+export const postService = {
+  createPost,
+  getAllPost,
+  getPostById,
+  getMyPosts,
+  updatePost,
+};

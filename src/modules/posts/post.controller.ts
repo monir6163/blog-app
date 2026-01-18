@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { UserRole } from "../../../generated/prisma/enums";
 import paginationSortingHelper from "../../helpers/paginationSorting";
 import { Payload } from "./interface.types";
 import { postService } from "./post.service";
@@ -79,9 +80,32 @@ const getMyPosts = async (req: Request, res: Response) => {
   }
 };
 
+const updatePost = async (req: Request, res: Response) => {
+  try {
+    const authorId = req.user;
+    const { postId } = req.params;
+    const isAdmin = authorId?.role === UserRole.ADMIN;
+    const result = await postService.updatePost(
+      authorId?.id as string,
+      postId,
+      req.body,
+      isAdmin,
+    );
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to update post";
+    res.status(500).json({ error: errorMessage, details: error });
+  }
+};
+
 export const postController = {
   createPost,
   getAllPost,
   getPostById,
   getMyPosts,
+  updatePost,
 };
