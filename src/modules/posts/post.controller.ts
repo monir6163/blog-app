@@ -123,6 +123,20 @@ const deletePost = async (req: Request, res: Response) => {
   }
 };
 
+const postStats = async (req: Request, res: Response) => {
+  try {
+    const result = await postService.postStats();
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to analytics report";
+    res.status(500).json({ error: errorMessage, details: error });
+  }
+};
+
 export const postController = {
   createPost,
   getAllPost,
@@ -130,4 +144,5 @@ export const postController = {
   getMyPosts,
   updatePost,
   deletePost,
+  postStats,
 };

@@ -1,4 +1,9 @@
-import { CommentStatus, Post } from "../../../generated/prisma/client";
+import {
+  CommentStatus,
+  Post,
+  PostStatus,
+  UserRole,
+} from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { buildPostQueryCondition } from "../../utils/postQueryCondition";
 import { Payload } from "./interface.types";
@@ -160,6 +165,54 @@ const deletePost = async (
   return result;
 };
 
+const postStats = async () => {
+  const result = await prisma.$transaction(async (tx) => {
+    const [
+      totalPosts,
+      totalPublishedPosts,
+      totalDraftPosts,
+      totalArchivedPosts,
+      totalComments,
+      totalApprovedComments,
+      totalRejectedComments,
+      totalUsers,
+      totalAdmin,
+      totalUser,
+      totalPostViews,
+    ] = await Promise.all([
+      await tx.post.count(),
+      await tx.post.count({ where: { status: PostStatus.PUBLISHED } }),
+      await tx.post.count({ where: { status: PostStatus.DRAFT } }),
+      await tx.post.count({ where: { status: PostStatus.ARCHIVED } }),
+      await tx.comment.count(),
+      await tx.comment.count({ where: { status: CommentStatus.APPROVED } }),
+      await tx.comment.count({ where: { status: CommentStatus.REJECT } }),
+      await tx.user.count(),
+      await tx.user.count({ where: { role: UserRole.ADMIN } }),
+      await tx.user.count({ where: { role: UserRole.USER } }),
+      await tx.post.aggregate({
+        _sum: {
+          views: true,
+        },
+      }),
+    ]);
+    return {
+      totalPosts,
+      totalPublishedPosts,
+      totalDraftPosts,
+      totalArchivedPosts,
+      totalComments,
+      totalApprovedComments,
+      totalRejectedComments,
+      totalUsers,
+      totalAdmin,
+      totalUser,
+      totalPostViews: totalPostViews._sum.views,
+    };
+  });
+  return result;
+};
+
 export const postService = {
   createPost,
   getAllPost,
@@ -167,4 +220,5 @@ export const postService = {
   getMyPosts,
   updatePost,
   deletePost,
+  postStats,
 };
