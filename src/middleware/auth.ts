@@ -1,6 +1,6 @@
 import { fromNodeHeaders } from "better-auth/node";
 import { NextFunction, Request, Response } from "express";
-import { UserRole } from "../../generated/prisma/enums";
+import { UserRole, UserStatus } from "../../generated/prisma/enums";
 import { auth } from "../lib/auth";
 
 declare global {
@@ -10,10 +10,11 @@ declare global {
         id: string;
         name: string;
         email: string;
-        role: string;
+        role: UserRole;
         emailVerified: boolean;
         image: string;
         phone: string;
+        status: UserStatus;
       };
     }
   }
@@ -40,12 +41,13 @@ export const authMiddlware = (...roles: UserRole[]) => {
         id: session.user.id,
         name: session.user.name,
         email: session.user.email,
-        role: session.user.role as string,
+        role: session.user.role as UserRole,
         emailVerified: session.user.emailVerified,
         image: session.user.image as string,
         phone: session.user.phone as string,
+        status: session.user.status as UserStatus,
       };
-      if (roles.length && !roles.includes(req.user.role as UserRole)) {
+      if (roles.length && !roles.includes(req?.user?.role)) {
         return res.status(403).json({
           success: false,
           message: "Access Forbidden! You don't have permission.",
